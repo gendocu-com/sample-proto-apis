@@ -1,0 +1,42 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/gendocu-com/sample-client-sdk-repository/brokers-api/account;account";
+package account;
+
+//AccountService might be used for managing active session. You can also manage your account data using this endpoint
+service AccountService {
+  //ListActiveSession returns all active sessions for current account.
+  rpc ListActiveSessions(google.protobuf.Empty) returns(ActiveSessionListResponse) {}
+  //LogoutSession cancels selected session. It can even logout session used for this request.
+  rpc LogoutSession(LogoutSessionRequest) returns(LogoutSessionResponse) {}
+  //ChangePassword changes the password for current account.
+  rpc ChangePassword(ChangePasswordRequest) returns(ChangePasswordResponse) {}
+}
+
+message ActiveSessionListResponse {
+  repeated Session session = 1;
+}
+
+message Session {
+  string session_id = 1;
+  string ip  = 2;
+  string lastUsed  = 3;
+}
+
+message LogoutSessionRequest {
+  string session_id = 1;
+}
+
+message LogoutSessionResponse {
+  string status = 1;
+}
+
+message ChangePasswordRequest {
+  string old_password = 1;
+  string new_password = 2;
+}
+
+message ChangePasswordResponse {
+  string result = 1;
+}

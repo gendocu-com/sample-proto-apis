@@ -1,0 +1,56 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+
+option go_package = "github.com/gendocu-com/sample-client-sdk-repository/brokers-mvp-api/trade;trade";
+package trade;
+
+service TradingService {
+  rpc Buy(BuyRequest) returns(TradeResponse) {}
+  rpc Sell(SellRequest) returns(TradeResponse) {}
+  rpc Cancel(CancelRequest) returns(Response) {}
+  rpc ListOrders(google.protobuf.Empty) returns (Orders) {}
+  rpc ListInstruments(google.protobuf.Empty) returns (InstrumentsResponse){}
+}
+
+message BuyRequest {
+  string instrument_name = 1;
+  string order_type = 2;
+  int32 quantity = 3;
+  string transaction_id = 4;
+}
+
+message TradeResponse {
+  string response_type = 1;
+}
+
+message SellRequest {
+  string instrument_name = 1;
+  string order_type = 2;
+  int32  quantity = 3;
+  string transaction_id = 4;
+}
+
+message CancelRequest {
+  string transaction_id = 1;
+}
+
+message Response {
+  string response_type = 1;
+}
+
+message Orders {
+  repeated Order orders = 1;
+}
+message Order {
+  string instrument_name = 1;
+  string order_type = 2;
+}
+message InstrumentsResponse {
+  repeated Instrument instruments = 1;
+}
+
+message Instrument {
+  string symbol = 1;
+  string market_name = 2;
+}

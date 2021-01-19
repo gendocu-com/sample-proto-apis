@@ -1,0 +1,72 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/gendocu-com/sample-client-sdk-repository/brokers-api/trade;trade";
+package trade;
+
+//TradingService makes it possible to trade the instruments. Please be aware, that those actions are asynchronous.
+//They execution time depends on the liquidity of the given instrument. We advise to trade during market open hours.
+//Please ensure that you use the unique identifier.
+service TradingService {
+  //Buy method is asynchronous. Ensure that you have set the transaction id properly - it has to be unique for each transaction. You can retry the same transaction with same id, in case of any failure.
+  rpc Buy(BuyRequest) returns(TradeResponse) {}
+  //Sell method is asynchronous. Ensure that you have set the transaction id properly - it has to be unique for each transaction. You can retry the same transaction with same id, in case of any failure.
+  rpc Sell(SellRequest) returns(TradeResponse) {}
+  //Cancel method is synchronous. It might be accepted, partially-rejected or rejected depending on the progress in order execution.
+  rpc Cancel(CancelRequest) returns(Response) {}
+  //ListOrders method is synchronous. It returns the list of active orders. Be aware, that the order list might be outdated right after receiving the response.
+  rpc ListOrders(google.protobuf.Empty) returns (Orders) {}
+  //ListInstruments method lists all available instruments on market.
+  rpc ListInstruments(google.protobuf.Empty) returns (InstrumentsResponse){}
+}
+
+message BuyRequest {
+  string instrument_name = 1;
+  string order_type = 2;
+  int32 quantity = 3;
+  string transaction_id = 4;
+  LimitMoney limit = 5;
+}
+
+message TradeResponse {
+  string response_type = 1;
+  string order_id = 2;
+}
+
+message SellRequest {
+  string instrument_name = 1;
+  string order_type = 2;
+  int32  quantity = 3;
+  string transaction_id = 4;
+  LimitMoney limit = 5;
+}
+
+message CancelRequest {
+  string order_id = 1;
+}
+
+message Response {
+  string response_type = 1;
+  string order_id = 2;
+}
+
+message Orders {
+  repeated Order orders = 1;
+}
+message Order {
+  string instrument_name = 1;
+  string order_type = 2;
+}
+message InstrumentsResponse {
+  repeated Instrument instruments = 1;
+}
+
+message Instrument {
+  string symbol = 1;
+  string market_name = 2;
+}
+message LimitMoney {
+  string currency_code = 1;
+  int64 units = 2;
+  int32 nanos = 3;
+}

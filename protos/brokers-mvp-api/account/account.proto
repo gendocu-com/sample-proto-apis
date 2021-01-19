@@ -1,0 +1,38 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/gendocu-com/sample-client-sdk-repository/brokers-mvp-api/account;account";
+package account;
+
+service AccountService {
+  rpc ListActiveSessions(google.protobuf.Empty) returns(ActiveSessionListResponse) {}
+  rpc LogoutSession(LogoutSessionRequest) returns(LogoutSessionResponse) {}
+  rpc ChangePassword(ChangePasswordRequest) returns(ChangePasswordResponse) {}
+}
+
+message ActiveSessionListResponse {
+  repeated Session session = 1;
+}
+
+message Session {
+  string session_id = 1;
+  string ip  = 2;
+  string lastUsed  = 3;
+}
+
+message LogoutSessionRequest {
+  string session_id = 1;
+}
+
+message LogoutSessionResponse {
+  string status = 1;
+}
+
+message ChangePasswordRequest {
+  string oldPassword = 1;
+  string newPassword = 2;
+}
+
+message ChangePasswordResponse {
+  string result = 1;
+}

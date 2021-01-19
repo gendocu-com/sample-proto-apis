@@ -1,0 +1,32 @@
+syntax = "proto3";
+option go_package = "github.com/gendocu-com/sample-client-sdk-repository/brokers-mvp-api/trade;trade";
+
+package trade;
+service MarketService {
+  rpc FindSymbol(FindSymbolRequest) returns (FindSymbolResponse){}
+  rpc GetPrice(GetPriceRequest) returns (GetPriceReponse){}
+}
+
+message FindSymbolRequest {
+  string phrase = 1;
+  string market = 2;
+}
+
+message FindSymbolResponse {
+  repeated SymbolProposition result = 1;
+}
+message SymbolProposition {
+  string symbol = 1;
+  float ask = 2;
+  float bid = 3;
+}
+
+message GetPriceRequest {
+  string symbol = 1;
+}
+
+message GetPriceReponse {
+  string symbol = 1;
+  float ask = 2;
+  float bid = 3;
+}
